@@ -1,6 +1,6 @@
 from typing import Optional
 from pydantic import BaseModel
-from pydantic.types import constr
+from pydantic.types import conint, constr
 
 
 class address(BaseModel):
