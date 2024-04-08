@@ -1,15 +1,16 @@
 from typing import Optional
 from pydantic import BaseModel
+from pydantic.types import constr
 
 
 class address(BaseModel):
-    city: str
-    country: str
+    city: constr(min_length=1)
+    country: constr(min_length=1)
 
 
 class Student(BaseModel):
-    name: str
-    age: int
+    name: constr(min_length=1)
+    age: conint(gt=0)
     address: address
 
 
