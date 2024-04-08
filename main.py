@@ -45,10 +45,20 @@ async def get_student(student_id: str):
 
 
 @app.patch("/students/{student_id}", status_code=204)
-async def patch_students(student_id: str, studentt: StudentUpdate):
+async def patch_students(student_id: str, student: StudentUpdate):
     try:
-        for k, v in (studentt.model_dump(exclude_unset=True)).items():
-            collection.update_one({"_id": ObjectId(student_id)}, {"$set": {k: v}})
+        studentaddr = individual_serial(
+            collection.find_one({"_id": ObjectId(student_id)})
+        )
+        address = studentaddr["address"]
+        for k, v in (student.model_dump(exclude_unset=True)).items():
+            if k == "address":
+                collection.update_one(
+                    {"_id": ObjectId(student_id)},
+                    [{"$set": {k: {"$mergeObjects": [address, v]}}}],
+                )
+            else:
+                collection.update_one({"_id": ObjectId(student_id)}, {"$set": {k: v}})
     except:
         raise HTTPException(status_code=500, detail="something went wrong")
 
