@@ -42,3 +42,21 @@ async def get_student(student_id: str):
         return {"student": dict(student)}
     except:
         raise HTTPException(status_code=404, detail="No student found")
+
+
+@app.patch("/students/{student_id}", status_code=204)
+async def patch_students(student_id: str, studentt: StudentUpdate):
+    try:
+        for k, v in (studentt.model_dump(exclude_unset=True)).items():
+            collection.update_one({"_id": ObjectId(student_id)}, {"$set": {k: v}})
+    except:
+        raise HTTPException(status_code=500, detail="something went wrong")
+
+
+@app.delete("/students/{students_id}")
+async def delete_student(student_id: str):
+    try:
+        collection.find_one_and_delete({"_id": ObjectId(student_id)})
+        return {}
+    except:
+        raise HTTPException(status_code=404, detail="No student found")
