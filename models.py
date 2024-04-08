@@ -15,8 +15,8 @@ class Student(BaseModel):
 
 
 class addressUpdate(BaseModel):
-    city: Optional[str]
-    country: Optional[str]
+    city: Optional[str] = None
+    country: Optional[str] = None
 
 
 class StudentUpdate(BaseModel):
