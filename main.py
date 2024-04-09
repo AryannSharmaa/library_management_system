@@ -22,11 +22,15 @@ async def get_students(country: str | None = None, age: int | None = None):
     students = list_serial(collection.find())
     if country and age:
         filtered = filter(
-            lambda x: x["address"]["country"] == country and x["age"] >= age, students
+            lambda x: x["address"]["country"].lower() == country.lower()
+            and x["age"] >= age,
+            students,
         )
         return {"students": list(filtered)}
     if country:
-        filtered = filter(lambda x: x["address"]["country"] == country, students)
+        filtered = filter(
+            lambda x: x["address"]["country"].lower() == country.lower(), students
+        )
         return {"students": list(filtered)}
     if age:
         filtered = filter(lambda x: x["age"] >= age, students)
